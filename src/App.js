@@ -1,14 +1,14 @@
 // 应用的根组件
 
 
-import React, { Component } from 'react'
+import React from 'react'
+import './App.less'
+import { Button } from "antd"
 
-export default class App extends Component {
-    render() {
-        return (
-            <div>
-                App
-            </div>
-        )
-    }
-}
+const App = () => (
+    <div className="App">
+      <Button type="primary">Button</Button>
+    </div>
+  );
+  
+  export default App;
