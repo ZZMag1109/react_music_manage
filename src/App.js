@@ -3,12 +3,23 @@
 
 import React from 'react'
 import './App.less'
-import { Button } from "antd"
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/login/login';
+import Admin from './pages/admin/admin';
 
 const App = () => (
     <div className="App">
-      <Button type="primary">Button</Button>
+        <HashRouter>
+            <Routes>
+                <Route path="/login" element={<Login/>}></Route>
+                <Route path="/admin" element={<Admin/>}></Route>
+                <Route path="/" element={<Navigate to="/login"/>}></Route>
+            </Routes>
+        </HashRouter>
     </div>
+        
+
+    
   );
   
   export default App;
