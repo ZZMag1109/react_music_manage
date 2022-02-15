@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.less'
 import { Button, Form, Input } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { getLoginStatus } from '../../api/index'
+import { useNavigate, Navigate } from 'react-router-dom';
+import { message } from 'antd'
 
-export default function Login() {
+export default function Login(props) {
+    const navigate = useNavigate();
+    
     const formObj = {
         useName: "",
-        Password: "",
+        password: "",
     };
     const [ formData, setFormData ] = useState(formObj);
 
@@ -21,6 +26,32 @@ export default function Login() {
         wrapperCol: { span: 16},
     }
 
+    //登录
+    const submitForm = async(e) => {
+        e.preventDefault();
+        let res = await getLoginStatus({
+            name: formData.useName,
+            password: formData.password
+        });
+        //登陆成功
+        if (res && res.head && res.head.code == "1") {
+            message.success(res.head.msg);
+            //将usera信息保存到local中
+            const user = res.body;
+            localStorage.setItem('user_key', JSON.stringify(user));
+            navigate('/admin', { replace: true });
+        } else if (res && res.head && res.head.code == "0") {
+            message.error(res.head.msg);
+        }
+    }
+
+    useEffect(() => {
+        //读取保存的user信息，如果不存在，直接跳转到登录界面
+       const user = JSON.parse(localStorage.getItem("user_key") || "{}");
+       if (user.id) {
+        navigate('/admin', { replace: true });
+       }
+    },[])
 
     return (
         <div className='login-wrap'>
@@ -45,7 +76,7 @@ export default function Login() {
                 </Form.Item>
                 <Form.Item>
                   <div className='login-btn'>
-                      <Button type='primary' htmlType='submit' onClick="">登录</Button>
+                      <Button type='primary' htmlType='submit' onClick={submitForm}>登录</Button>
                   </div>
                 </Form.Item>
             </Form>
