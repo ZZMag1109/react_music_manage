@@ -3,21 +3,17 @@
 
 import React from 'react'
 import './App.less'
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import Login from './pages/login/login';
-import Admin from './pages/admin/admin';
+import { useRoutes } from 'react-router-dom';
+import routes from './routes';
 
-const App = () => (
-    <div className="App">
-            <Routes>
-                <Route path="/login" element={<Login/>}></Route>
-                <Route path="/admin/*" element={<Admin/>}></Route>
-                <Route path="/" element={<Navigate to="/login"/>}></Route>
-            </Routes>
-    </div>
-        
-
-    
-  );
+const App = () => {
+    // 根据路由表生成路由规则
+    const element = useRoutes(routes);
+    return (
+        <div className="App">
+            {element}
+        </div>
+    )
+};
   
   export default App;
